@@ -1,0 +1,167 @@
+{% extends 'dashboard/base.html' %}
+{% block body %}
+{% load staticfiles %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.7.2/d3.min.js"></script>
+<script src="{% static 'dashboard/js/d3pie.min.js' %}"></script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Dashboard</h1>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Pie Chart
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="pieChart"></div>
+                    <input id="start_date" type="date" placeholder="" />
+                    <input id="end_date" type="date" placeholder="" />
+                    <button type="button" onclick="searchDateRange()" placeholder="Search">Search</button>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+         <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Table
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="event_table">
+                        {{table_events  |safe }}
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+createArray();
+createChart();
+
+$(function() {
+    $('input[name="daterange"]').daterangepicker();
+});
+
+function createArray(){
+    array_for_chart = []
+    hash_for_chart = {}
+    chart_events = "{{chart_events_json}}"
+    clean_table_event = chart_events.replace(/&quot;/g,'"')
+    clean_table_event_array = JSON.parse(clean_table_event)
+    for (i = 0; i < 10; i++) {
+        if ( clean_table_event_array[i]["EventID"] == null ){
+             clean_table_event_array[i]["EventID"] = 0
+        }
+        hash_for_chart['label'] = clean_table_event_array[i]["EventID"]
+        hash_for_chart['value'] = clean_table_event_array[i]["count"]
+        hash_for_chart['color'] = getRandomColor();
+        array_for_chart.push(hash_for_chart)
+        hash_for_chart = {}
+    }
+}
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function createChart(){
+
+    var pie = new d3pie("pieChart", {
+        "header": {
+            "title": {
+                "text": "Event count",
+                "fontSize": 22,
+                "font": "verdana"
+            },
+            "subtitle": {
+                "color": "#999999",
+                "fontSize": 10,
+                "font": "verdana"
+            },
+            "titleSubtitlePadding": 12
+        },
+        "footer": {
+            "text": "Event Count According to Event id for 10 records",
+            "color": "black",
+            "fontSize": 14,
+            "font": "open sans",
+            "location": "bottom-center"
+        },
+        "size": {
+            "canvasHeight": 400,
+            "canvasWidth": 590,
+            "pieOuterRadius": "88%"
+        },
+        "data": {
+            "content": array_for_chart
+        },
+        "labels": {
+            "outer": {
+                "pieDistance": 32
+            },
+            "inner": {
+                "format": "value"
+            },
+            "mainLabel": {
+                "font": "verdana"
+            },
+            "percentage": {
+                "color": "#e1e1e1",
+                "font": "verdana",
+                "decimalPlaces": 0
+            },
+            "value": {
+                "color": "#e1e1e1",
+                "font": "verdana"
+            },
+            "lines": {
+                "enabled": true,
+                "color": "#cccccc"
+            },
+            "truncation": {
+                "enabled": true
+            }
+        },
+        "effects": {
+            "pullOutSegmentOnClick": {
+                "effect": "linear",
+                "speed": 400,
+                "size": 8
+            }
+        }
+    });
+}
+
+function searchDateRange(){
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+    $.ajax({
+        url: '/dashboard/filter_tables',
+        data: {
+          'start_date': start_date,'end_date': end_date
+        },
+        dataType: 'json',
+        success: function (data) {
+            createArray();
+            createChart();
+        },
+        error: function (data) {
+            console.log("something went wrong")
+        }
+      });
+
+}
+
+</script>
+
+
+{% endblock %}
