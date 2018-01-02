@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^$', auth_views.login, {'template_name': 'login.html'}, name='root'),
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, {'template_name': 'login.html'}, name='/'),
+    url(r'^logout/$', auth_views.logout, {'template_name': 'logged_out.html'}, name='/'),
     url(r'^dashboard/', include('dashboard.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

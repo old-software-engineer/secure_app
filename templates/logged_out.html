@@ -1,9 +1,23 @@
 {% extends 'base.html' %}
-
-{% block title %}See you!{% endblock %}
-
 {% block content %}
-  <h2>Logged out</h2>
-  <p>You have been successfully logged out.</p>
-  <p><a href="{% url 'login' %}">Log in</a> again.</p>
+{% load staticfiles %}
+<div class="login-wrapper ">
+  <div class="bg-pic">
+    <img src="{% static 'dashboard/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg'%}" data-src="{% static 'dashboard/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg'%}" data-src-retina="{% static 'dashboard/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg'%}" alt="" class="lazy">
+
+    <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
+      <h2 class="semi-bold text-white"></h2>
+      <p class="small"></p>
+    </div>
+  </div>
+
+
+  <div class="login-container bg-white">
+    <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
+      <!--<img src="{% static 'dashboard/img/logo.png' %}" alt="logo" data-src="{% static 'dashboard/img/logo.png' %}" data-src-retina="{% static 'dashboard/img/logo_2x.png' %}" width="78" height="22">-->
+      <p class="p-t-35">Successfully logged out!</p>
+      <a class="btn btn-primary" href="/login">Click To Sign in</a>
+    </div>
+  </div>
+</div>
 {% endblock %}
