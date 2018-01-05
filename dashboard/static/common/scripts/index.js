@@ -19,12 +19,12 @@
         // chartistPieChart4('#analytics-pie-chart-4');
         // chartJsAreaChart('analytics-area-chart', colors, palette);
         // chartJsBarChart('analytics-bar-chart', colors, palette);
-        setTimeout(function() {
-            notify('You have 5 unread messages', 'info');
-        }, 2000);
-        setTimeout(function() {
-            notify('Someone posted something on facebook', 'danger');
-        }, 30000);
+        // setTimeout(function() {
+        //     notify('You have 5 unread messages', 'info');
+        // }, 2000);
+        // setTimeout(function() {
+        //     notify('Someone posted something on facebook', 'danger');
+        // }, 30000);
         $('button[data-animate]').on('click', function() {
             var id = $(this).data('animate');
             animateButton('#' + id);
